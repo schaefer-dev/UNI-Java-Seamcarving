@@ -16,14 +16,117 @@ public final class SeamCarverImpl implements SeamCarver {
 		return vertical ? computeVerticalSeam(image) : computeHorizontalSeam(image);
 	}
 	@Override
-	public final int[] computeVerticalSeam(final BufferedImage image) {
+	public final int[] computeVerticalSeam(final BufferedImage image) {		
 		// TODO Implement this method
-		throw new UnsupportedOperationException("This method has not yet been implemented.");
+		
+		if (image==null){throw new IllegalArgumentException("ERROR: Picture is empty!");}
+		
+		
+		int[][] energieBild = computeImageEnergy(image,true,false);
+		
+		int hight = image.getHeight()-1;
+		int width = image.getWidth()-1;
+		
+		if (width <= 1) {throw new IllegalArgumentException("ERROR: Picture is too small!");}
+		
+		int counter = 0;
+		
+		/* kleinstes Element in unterster Reihe = (counter,hight) */
+		for (int i=1;i<=width;i++){
+			if (energieBild[counter][hight]>energieBild[i][hight]) {counter = i;}
+		}
+		
+		int[] res = new int[]{};
+		res[0]=counter;
+		
+		int counter2=0; //Merkstelle fuer kleinste Stelle
+		
+		hight=hight-1;
+		
+		/* schleife fuer alle elemente ueber letzter Reihe*/
+		for (int i=1; i<=(image.getHeight()-1);i++) {
+			counter2 = 0;
+			/* kleinstes von links und mitte auf counter2*/
+			if (counter-1>=0){
+				if (energieBild[counter-1][hight]<=energieBild[counter][hight]) {
+					counter2 = counter -1;
+					}
+				else {
+					counter2=counter;
+					}
+			}
+			if (counter +1 <= width){
+				if (energieBild[counter2][hight]<=energieBild[counter+1][hight]) {/*schon auf kleinstem Element*/}
+				else {
+					counter2=counter+1;
+				}
+			}
+			res[i]=counter2;
+			hight=hight-1;
+			counter = counter2;
+		}
+		
+		return res;
+		
 	}
 	@Override
 	public final int[] computeHorizontalSeam(final BufferedImage image) {
 		// TODO Implement this method
-		throw new UnsupportedOperationException("This method has not yet been implemented.");
+		
+		
+		/* NOT TESTED !!! YET */
+		
+		if (image==null){throw new IllegalArgumentException("ERROR: Picture is empty!");}
+		
+		
+		int[][] energieBild = computeImageEnergy(image,true,false);
+		
+		int hight = image.getHeight()-1;
+		int width = image.getWidth()-1;
+		
+		if (hight <= 1) {throw new IllegalArgumentException("ERROR: Picture is too small!");}
+		
+		int counter = 0;
+		
+		/* kleinstes Element in unterster Reihe = (counter,hight) */
+		for (int i=1;i<=hight;i++){
+			if (energieBild[width][counter]>energieBild[width][i]) {counter = i;}
+		}
+		
+		int[] res = new int[]{};
+		res[0]=counter;
+		
+		int counter2=0; //Merkstelle fuer kleinste Stelle
+		
+		width=width-1;
+		
+		/* schleife fuer alle elemente ueber letzter Reihe*/
+		for (int i=1; i<=(image.getWidth()-1);i++) {
+			counter2 = 0;
+			/* kleinstes von links und mitte auf counter2*/
+			if (counter-1>=0){
+				if (energieBild[width][counter-1]<=energieBild[width][counter]) {
+					counter2 = counter -1;
+					}
+				else {
+					counter2=counter;
+					}
+			}
+			if (counter +1 <= hight){
+				if (energieBild[width][counter2]<=energieBild[width][counter+1]) {/*schon auf kleinstem Element*/}
+				else {
+					counter2=counter+1;
+				}
+			}
+			res[i]=counter2;
+			width=width-1;
+			counter = counter2;
+		}
+		
+		return res;
+		
+		
+		
 	}
 	
 	//------------------------------------------------------------------------//
@@ -32,6 +135,10 @@ public final class SeamCarverImpl implements SeamCarver {
 	
 	@Override
 	public final int[][] computeImageEnergy(final BufferedImage image, final boolean vertical, final boolean local) {
+		
+		// local ist nur Energie Pixel mit links + Energie Pixel mit rechts
+		
+		
 		// TODO Implement this method
 		throw new UnsupportedOperationException("This method has not yet been implemented.");
 	}
