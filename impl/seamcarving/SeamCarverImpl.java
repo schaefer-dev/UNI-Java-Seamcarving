@@ -45,7 +45,7 @@ public final class SeamCarverImpl implements SeamCarver {
 			}
 		}
 
-		int[] res = new int[] {};
+		int[] res = new int[hight+1];
 		res[0] = counter;
 
 		int counter2 = 0; // Merkstelle fuer kleinste Stelle
@@ -55,7 +55,7 @@ public final class SeamCarverImpl implements SeamCarver {
 		/* schleife fuer alle elemente ueber letzter Reihe */
 		for (int i = 1; i <= (image.getHeight() - 1); i++) {
 			counter2 = 0;
-			/* kleinstes von links und mitte auf counter2 */
+			/* kleinstes von links-oben und mitte-oben ermitteln. Counter2 enthaellt dessen x Koordinate */
 			if (counter - 1 >= 0) {
 				if (energieBild[counter - 1][hight] <= energieBild[counter][hight]) {
 					counter2 = counter - 1;
@@ -63,10 +63,10 @@ public final class SeamCarverImpl implements SeamCarver {
 					counter2 = counter;
 				}
 			}
-			if (counter + 1 <= width) {
+			if ((counter + 1) <= width) {
 				if (energieBild[counter2][hight] <= energieBild[counter + 1][hight]) {
 					/*
-					 * schon auf kleinstem Element
+					 * counter 2 schon auf kleinstem Element
 					 */
 				} else {
 					counter2 = counter + 1;
@@ -159,7 +159,7 @@ public final class SeamCarverImpl implements SeamCarver {
 		int hight = image.getHeight() - 1;
 		int width = image.getWidth() - 1;
 
-		int[][] energyArray = new int[width][hight];
+		int[][] energyArray = new int[width+1][hight+1];
 
 		if (local == true) {
 			/* lokale Energie berechnen */
@@ -298,13 +298,13 @@ public final class SeamCarverImpl implements SeamCarver {
 											x - 1, y), this
 											.evaluateEnergyFunction(image,
 													x - 1, y - 1)));
-						}
-						else {
+						} else {
 							/* Fall mit y-1 und y und y+1 */
-							return (this.evaluateEnergyFunction(image, x, y) + Math.min(this.evaluateEnergyFunction(image,
-									x - 1, y+1), Math
+							return (this.evaluateEnergyFunction(image, x, y) + Math
 									.min(this.evaluateEnergyFunction(image,
-											x - 1, y), this
+											x - 1, y + 1), Math.min(this
+											.evaluateEnergyFunction(image,
+													x - 1, y), this
 											.evaluateEnergyFunction(image,
 													x - 1, y - 1))));
 						}
