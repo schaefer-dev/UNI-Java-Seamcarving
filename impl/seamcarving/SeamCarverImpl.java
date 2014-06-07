@@ -32,7 +32,7 @@ public final class SeamCarverImpl implements SeamCarver {
 		int hight = image.getHeight() - 1;
 		int width = image.getWidth() - 1;
 
-		if (width+1 <= 1) {
+		if (width + 1 <= 1) {
 			throw new IllegalArgumentException("ERROR: Picture is too small!");
 		}
 
@@ -45,7 +45,7 @@ public final class SeamCarverImpl implements SeamCarver {
 			}
 		}
 
-		int[] res = new int[hight+1];
+		int[] res = new int[hight + 1];
 		res[0] = counter;
 
 		int counter2 = 0; // Merkstelle fuer kleinste Stelle
@@ -55,7 +55,10 @@ public final class SeamCarverImpl implements SeamCarver {
 		/* schleife fuer alle elemente ueber letzter Reihe */
 		for (int i = 1; i <= (image.getHeight() - 1); i++) {
 			counter2 = 0;
-			/* kleinstes von links-oben und mitte-oben ermitteln. Counter2 enthaellt dessen x Koordinate */
+			/*
+			 * kleinstes von links-oben und mitte-oben ermitteln. Counter2
+			 * enthaellt dessen x Koordinate
+			 */
 			if (counter - 1 >= 0) {
 				if (energieBild[counter - 1][hight] <= energieBild[counter][hight]) {
 					counter2 = counter - 1;
@@ -96,7 +99,7 @@ public final class SeamCarverImpl implements SeamCarver {
 		int hight = image.getHeight() - 1;
 		int width = image.getWidth() - 1;
 
-		if (hight+1 <= 1) {
+		if (hight + 1 <= 1) {
 			throw new IllegalArgumentException("ERROR: Picture is too small!");
 		}
 
@@ -109,7 +112,7 @@ public final class SeamCarverImpl implements SeamCarver {
 			}
 		}
 
-		int[] res = new int[width+1] ;
+		int[] res = new int[width + 1];
 		res[0] = counter;
 
 		int counter2 = 0; // Merkstelle fuer kleinste Stelle
@@ -159,7 +162,7 @@ public final class SeamCarverImpl implements SeamCarver {
 		int hight = image.getHeight() - 1;
 		int width = image.getWidth() - 1;
 
-		int[][] energyArray = new int[width+1][hight+1];
+		int[][] energyArray = new int[width + 1][hight + 1];
 
 		if (local == true) {
 			/* lokale Energie berechnen */
@@ -200,10 +203,11 @@ public final class SeamCarverImpl implements SeamCarver {
 		// TODO Implement this method
 
 		// Abfangen von (energy == null) und gleichzeitig local=false? Warum??
-		if ((energy==null)&&(local==false)){
-			throw new IllegalArgumentException("ERROR: Wrong call of computePixelEnergy");
+		if ((energy == null) && (local == false)) {
+			throw new IllegalArgumentException(
+					"ERROR: Wrong call of computePixelEnergy");
 		}
-		
+
 		/* Bild leer abfangen */
 		if (image == null) {
 			throw new IllegalArgumentException("ERROR: Picture is empty!");
@@ -242,33 +246,21 @@ public final class SeamCarverImpl implements SeamCarver {
 					if (x - 1 < 0) {
 						if (x + 1 > width) {
 							/* Fall nur mit x */
-							return (this.evaluateEnergyFunction(image, x, y) + this
-									.evaluateEnergyFunction(image, x, y - 1));
+							return (this.evaluateEnergyFunction(image, x, y) + energy[x][y - 1]);
 						} else {
 							/* Fall mit x und mit x+1 */
 							return (this.evaluateEnergyFunction(image, x, y) + Math
-									.min(this.evaluateEnergyFunction(image, x,
-											y - 1), this
-											.evaluateEnergyFunction(image,
-													x + 1, y - 1)));
+									.min(energy[x][y - 1], energy[x + 1][y - 1]));
 						}
 					} else {
 						if (x + 1 > width) {
 							/* Fall mit x-1 und x */
 							return (this.evaluateEnergyFunction(image, x, y) + Math
-									.min(this.evaluateEnergyFunction(image, x,
-											y - 1), this
-											.evaluateEnergyFunction(image,
-													x - 1, y - 1)));
+									.min(energy[x][y-1], energy[x-1][y-1]));
 						} else {
 							/* Fall mit x-1, x und x+1 */
 							return (this.evaluateEnergyFunction(image, x, y) + Math
-									.min(this.evaluateEnergyFunction(image,
-											x + 1, y - 1), Math.min(this
-											.evaluateEnergyFunction(image, x,
-													y - 1), this
-											.evaluateEnergyFunction(image,
-													x - 1, y - 1))));
+									.min(energy[x+1][y-1], Math.min(energy[x][y-1], energy[x-1][y-1])));
 						}
 					}
 				}
@@ -283,33 +275,21 @@ public final class SeamCarverImpl implements SeamCarver {
 					if (y - 1 < 0) {
 						if (y + 1 > hight) {
 							/* fall nur mit y */
-							return (this.evaluateEnergyFunction(image, x, y) + this
-									.evaluateEnergyFunction(image, x - 1, y));
+							return (this.evaluateEnergyFunction(image, x, y) + energy[x-1][y]);
 						} else {
 							/* fall mit y und y+1 */
 							return (this.evaluateEnergyFunction(image, x, y) + Math
-									.min(this.evaluateEnergyFunction(image,
-											x - 1, y), this
-											.evaluateEnergyFunction(image,
-													x - 1, y + 1)));
+									.min(energy[x-1][y], energy[x-1][y+1]));
 						}
 					} else {
 						if (y + 1 > hight) {
 							/* Fall mit y-1 und y */
 							return (this.evaluateEnergyFunction(image, x, y) + Math
-									.min(this.evaluateEnergyFunction(image,
-											x - 1, y), this
-											.evaluateEnergyFunction(image,
-													x - 1, y - 1)));
+									.min(energy[x-1][y], energy[x-1][y-1]));
 						} else {
 							/* Fall mit y-1 und y und y+1 */
 							return (this.evaluateEnergyFunction(image, x, y) + Math
-									.min(this.evaluateEnergyFunction(image,
-											x - 1, y + 1), Math.min(this
-											.evaluateEnergyFunction(image,
-													x - 1, y), this
-											.evaluateEnergyFunction(image,
-													x - 1, y - 1))));
+									.min(energy[x-1][y+1], Math.min(energy[x-1][y],energy[x-1][y-1])));
 						}
 					}
 				}
