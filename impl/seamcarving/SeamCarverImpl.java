@@ -183,7 +183,7 @@ public final class SeamCarverImpl implements SeamCarver {
 				/* horizontal aufrufen */
 				for (int c = 0; c <= width; c++) {
 					for (int i = 0; i <= hight; i++) {
-						energyArray[i][c] = computePixelEnergy(image, c, i,
+						energyArray[c][i] = computePixelEnergy(image, c, i,
 								energyArray, false, false);
 					}
 				}
@@ -200,7 +200,10 @@ public final class SeamCarverImpl implements SeamCarver {
 		// TODO Implement this method
 
 		// Abfangen von (energy == null) und gleichzeitig local=false? Warum??
-
+		if ((energy==null)&&(local==false)){
+			throw new IllegalArgumentException("ERROR: Wrong call of computePixelEnergy");
+		}
+		
 		/* Bild leer abfangen */
 		if (image == null) {
 			throw new IllegalArgumentException("ERROR: Picture is empty!");
