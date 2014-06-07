@@ -32,7 +32,7 @@ public final class SeamCarverImpl implements SeamCarver {
 		int hight = image.getHeight() - 1;
 		int width = image.getWidth() - 1;
 
-		if (width <= 1) {
+		if (width+1 <= 1) {
 			throw new IllegalArgumentException("ERROR: Picture is too small!");
 		}
 
@@ -96,7 +96,7 @@ public final class SeamCarverImpl implements SeamCarver {
 		int hight = image.getHeight() - 1;
 		int width = image.getWidth() - 1;
 
-		if (hight <= 1) {
+		if (hight+1 <= 1) {
 			throw new IllegalArgumentException("ERROR: Picture is too small!");
 		}
 
@@ -109,7 +109,7 @@ public final class SeamCarverImpl implements SeamCarver {
 			}
 		}
 
-		int[] res = new int[] {};
+		int[] res = new int[width+1] ;
 		res[0] = counter;
 
 		int counter2 = 0; // Merkstelle fuer kleinste Stelle
