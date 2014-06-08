@@ -1,7 +1,7 @@
 package seamcarving;
 
 import java.awt.image.BufferedImage;
-
+//test
 /**
  * This is the implementation of the main SeamCarver interface.
  */
