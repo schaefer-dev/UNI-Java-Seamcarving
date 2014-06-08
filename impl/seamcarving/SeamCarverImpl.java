@@ -60,7 +60,8 @@ public final class SeamCarverImpl implements SeamCarver {
 			 * enthaellt dessen x Koordinate
 			 */
 			if (counter - 1 >= 0) {
-				if (energieBild[counter - 1][hight] <= energieBild[counter][hight]) {
+				if (energieBild[counter - 1][hight] < energieBild[counter][hight]) {
+					// !!!!! Da mitte priorisiert wird nur < und nicht <= !!!!
 					counter2 = counter - 1;
 				} else {
 					counter2 = counter;
@@ -88,13 +89,11 @@ public final class SeamCarverImpl implements SeamCarver {
 	public final int[] computeHorizontalSeam(final BufferedImage image) {
 		// TODO Implement this method
 
-		/* NOT TESTED !!! YET */
-
 		if (image == null) {
 			throw new IllegalArgumentException("ERROR: Picture is empty!");
 		}
 
-		int[][] energieBild = computeImageEnergy(image, true, false);
+		int[][] energieBild = computeImageEnergy(image, false, false);
 
 		int hight = image.getHeight() - 1;
 		int width = image.getWidth() - 1;
@@ -105,7 +104,7 @@ public final class SeamCarverImpl implements SeamCarver {
 
 		int counter = 0;
 
-		/* kleinstes Element in unterster Reihe = (counter,hight) */
+		/* kleinstes Element in ganz rechter Reihe = (width, counter) */
 		for (int i = 1; i <= hight; i++) {
 			if (energieBild[width][counter] > energieBild[width][i]) {
 				counter = i;
@@ -124,7 +123,8 @@ public final class SeamCarverImpl implements SeamCarver {
 			counter2 = 0;
 			/* kleinstes von links und mitte auf counter2 */
 			if (counter - 1 >= 0) {
-				if (energieBild[width][counter - 1] <= energieBild[width][counter]) {
+				if (energieBild[width][counter - 1] < energieBild[width][counter]) {
+					// Mitte priorisiert !!!!
 					counter2 = counter - 1;
 				} else {
 					counter2 = counter;
@@ -202,7 +202,6 @@ public final class SeamCarverImpl implements SeamCarver {
 			final boolean local) {
 		// TODO Implement this method
 
-		// Abfangen von (energy == null) und gleichzeitig local=false? Warum??
 		if ((energy == null) && (local == false)) {
 			throw new IllegalArgumentException(
 					"ERROR: Wrong call of computePixelEnergy");
@@ -256,11 +255,13 @@ public final class SeamCarverImpl implements SeamCarver {
 						if (x + 1 > width) {
 							/* Fall mit x-1 und x */
 							return (this.evaluateEnergyFunction(image, x, y) + Math
-									.min(energy[x][y-1], energy[x-1][y-1]));
+									.min(energy[x][y - 1], energy[x - 1][y - 1]));
 						} else {
 							/* Fall mit x-1, x und x+1 */
 							return (this.evaluateEnergyFunction(image, x, y) + Math
-									.min(energy[x+1][y-1], Math.min(energy[x][y-1], energy[x-1][y-1])));
+									.min(energy[x + 1][y - 1], Math.min(
+											energy[x][y - 1],
+											energy[x - 1][y - 1])));
 						}
 					}
 				}
@@ -275,21 +276,23 @@ public final class SeamCarverImpl implements SeamCarver {
 					if (y - 1 < 0) {
 						if (y + 1 > hight) {
 							/* fall nur mit y */
-							return (this.evaluateEnergyFunction(image, x, y) + energy[x-1][y]);
+							return (this.evaluateEnergyFunction(image, x, y) + energy[x - 1][y]);
 						} else {
 							/* fall mit y und y+1 */
 							return (this.evaluateEnergyFunction(image, x, y) + Math
-									.min(energy[x-1][y], energy[x-1][y+1]));
+									.min(energy[x - 1][y], energy[x - 1][y + 1]));
 						}
 					} else {
 						if (y + 1 > hight) {
 							/* Fall mit y-1 und y */
 							return (this.evaluateEnergyFunction(image, x, y) + Math
-									.min(energy[x-1][y], energy[x-1][y-1]));
+									.min(energy[x - 1][y], energy[x - 1][y - 1]));
 						} else {
 							/* Fall mit y-1 und y und y+1 */
 							return (this.evaluateEnergyFunction(image, x, y) + Math
-									.min(energy[x-1][y+1], Math.min(energy[x-1][y],energy[x-1][y-1])));
+									.min(energy[x - 1][y + 1], Math.min(
+											energy[x - 1][y],
+											energy[x - 1][y - 1])));
 						}
 					}
 				}
