@@ -46,8 +46,7 @@ public final class SeamCarverImpl implements SeamCarver {
 		}
 
 		int[] res = new int[hight + 1];
-		//res[0] = counter;
-		/*new why does this work???*/ res[hight] = counter;
+		res[hight] = counter;
 
 		int counter2 = 0; // Merkstelle fuer kleinste Stelle
 
@@ -77,8 +76,7 @@ public final class SeamCarverImpl implements SeamCarver {
 					counter2 = counter + 1;
 				}
 			}
-			//res[i] = counter2;
-			/*new why does this work???*/ res[image.getHeight()-1-i]=counter2;
+			res[image.getHeight()-1-i]=counter2;
 			hight = hight - 1;
 			counter = counter2;
 		}
@@ -114,8 +112,7 @@ public final class SeamCarverImpl implements SeamCarver {
 		}
 
 		int[] res = new int[width + 1];
-		//res[0] = counter;
-		/*new why does this work???*/ res[width]=counter;
+		res[width]=counter;
 
 		int counter2 = 0; // Merkstelle fuer kleinste Stelle
 
@@ -141,7 +138,7 @@ public final class SeamCarverImpl implements SeamCarver {
 				}
 			}
 			res[i] = counter2;
-			/*new why does this work???*/ res[image.getWidth()-1-i]=counter2;
+			res[image.getWidth()-1-i]=counter2;
 			width = width - 1;
 			counter = counter2;
 		}
